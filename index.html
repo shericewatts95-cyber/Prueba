@@ -3,317 +3,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multi-Calculadora de Créditos Colombia (V2.0)</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
-        }
-        body {
-            background-color: #0f172a;
-            color: #f1f5f9;
-            padding: 20px;
-        }
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            background: #1e293b;
-            padding: 35px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            border: 1px solid #334155;
-        }
-        header {
-            text-align: center;
-            margin-bottom: 35px;
-            border-bottom: 1px solid #334155;
-            padding-bottom: 25px;
-        }
-        h1 { color: #38bdf8; font-size: 28px; margin-bottom: 8px; }
-        p.subtitle { color: #94a3b8; font-size: 14px; }
-        .badge {
-            background: #0284c7;
-            color: white;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 600;
-            vertical-align: middle;
-            margin-left: 8px;
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: 1.2fr 1fr;
-            gap: 35px;
-        }
-        @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
-        .form-group {
-            margin-bottom: 22px;
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: #94a3b8;
-            font-size: 14px;
-        }
-        input, select {
-            width: 100%;
-            padding: 12px 14px;
-            border: 1px solid #475569;
-            border-radius: 8px;
-            font-size: 15px;
-            background-color: #0f172a;
-            color: white;
-            transition: all 0.3s;
-        }
-        input:focus, select:focus {
-            outline: none;
-            border-color: #38bdf8;
-            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
-        }
-        .results-box {
-            background-color: #0f172a;
-            border-radius: 12px;
-            padding: 25px;
-            border-top: 4px solid #38bdf8;
-        }
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 14px 0;
-            border-bottom: 1px solid #334155;
-        }
-        .result-item:last-child { border-bottom: none; }
-        .result-label { font-weight: 500; color: #94a3b8; }
-        .result-value { font-weight: 700; color: #f8fafc; font-size: 18px; }
-        .highlight { color: #34d399; font-size: 22px; }
-        .info-card {
-            background: rgba(56, 189, 248, 0.1);
-            border: 1px solid rgba(56, 189, 248, 0.2);
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-            font-size: 13px;
-            color: #cbd5e1;
-            line-height: 1.6;
-        }
-        .tabs-container {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-            background: #0f172a;
-            padding: 6px;
-            border-radius: 8px;
-        }
-        .tab-btn {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: #94a3b8;
-            padding: 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 14px;
-            transition: all 0.2s;
-        }
-        .tab-btn.active {
-            background: #38bdf8;
-            color: #0f172a;
-        }
-    </style>
+    <title>VetEspecialistas CO | Productos Veterinarios en Barranquilla</title>
+    <!-- Tailwind CSS CDN para un diseño rápido, limpio y moderno -->
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div class="container">
-        <header>
-            <h1>Simulador Multicrédito Colombiano <span class="badge">V2.0 PRO</span></h1>
-            <p class="subtitle">Simulación avanzada: Vivienda, Vehículo, Consumo y Tarjetas con tasas de usura y seguros estimados</p>
-        </header>
+<body class="bg-[#F0FDFA] text-gray-800 font-sans antialiased">
 
-        <div class="tabs-container">
-            <button class="tab-btn active" onclick="cambiarTipo('hipotecario')">🏠 Hipotecario / Leasing</button>
-            <button class="tab-btn" onclick="cambiarTipo('vehiculo')">🚗 Vehículo</button>
-            <button class="tab-btn" onclick="cambiarTipo('libre')">💰 Libre Inversión</button>
-            <button class="tab-btn" onclick="cambiarTipo('tarjeta')">💳 Tarjeta de Crédito</button>
-        </div>
-        
-        <div class="grid">
-            <div>
-                <div class="form-group">
-                    <label id="lblMonto" for="montoPrincipal">Monto Total del Crédito / Valor Inmueble ($ COP)</label>
-                    <input type="number" id="montoPrincipal" value="150000000" step="5000000">
-                </div>
-                
-                <div class="form-group" id="divCuotaInicial">
-                    <label for="cuotaInicial">Cuota Inicial ($ COP)</label>
-                    <input type="number" id="cuotaInicial" value="45000000" step="5000000">
-                </div>
-
-                <div class="form-group" id="divAmortizacion">
-                    <label for="tipoSistema">Modalidad de Moneda</label>
-                    <select id="tipoSistema">
-                        <option value="pesos">Pesos Colombianos (Cuota Fija)</option>
-                        <option value="uvr">UVR (Indexado a Inflación / IPC)</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="tasaAnual">Tasa de Interés Nominal/Efectiva Propuesta (E.A. %)</label>
-                    <input type="number" id="tasaAnual" value="11.8" step="0.05">
-                </div>
-
-                <div class="form-group">
-                    <label id="lblPlazo" for="plazo">Plazo de Amortización (Meses)</label>
-                    <input type="number" id="plazo" value="180" min="1" max="360">
-                </div>
-
-                <div class="form-group">
-                    <label for="seguroMes">Seguro de Vida Obligatorio + Todo Riesgo Estimado (Mensual $ COP)</label>
-                    <input type="number" id="seguroMes" value="45000" step="5000">
-                </div>
+    <!-- 1. HEADER / NAVBAR -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <!-- Icono representativo de salud animal -->
+                <span class="text-2xl">🐾</span>
+                <span class="text-xl font-bold text-teal-700 tracking-tight">VetEspecialistas <span class="text-amber-500">CO</span></span>
             </div>
-            
-            <div>
-                <h2 style="font-size: 18px; margin-bottom: 15px; color: #38bdf8;">Análisis Financiero del Escenario</h2>
-                <div class="results-box">
-                    <div class="result-item">
-                        <span class="result-label">Capital Neto a Financiar</span>
-                        <span class="result-value" id="resFinanciar">$ 0</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">Tasa Periódica Mes Vencido (M.V.)</span>
-                        <span class="result-value" id="resTasaMes">0.00%</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">Cuota Base (Solo Capital + Interés)</span>
-                        <span class="result-value" id="resCuotaBase">$ 0</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">Seguros Mensuales Adicionados</span>
-                        <span class="result-value" id="resSeguro">$ 0</span>
-                    </div>
-                    <div class="result-item" style="background: rgba(52, 211, 153, 0.05); padding: 10px; border-radius: 6px;">
-                        <span class="result-label" style="color: #34d399; font-weight: 600;">CUOTA MENSUAL TOTAL</span>
-                        <span class="result-value highlight" id="resCuotaTotal">$ 0</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">Costo Total de Intereses Generados</span>
-                        <span class="result-value" id="resIntereses">$ 0</span>
-                    </div>
-                </div>
-                
-                <div class="info-card" id="infoDinamica">
-                    <strong>Análisis del Sistema:</strong> Los créditos hipotecarios en Colombia permiten plazos amplios y tasas competitivas. Recuerde validar si aplica a subsidios del gobierno (Mi Casa Ya / Cobertura FRECH).
-                </div>
+            <nav class="hidden md:flex space-x-6 font-medium text-gray-600">
+                <a href="#productos" class="hover:text-teal-600 transition">Productos</a>
+                <a href="#beneficios" class="hover:text-teal-600 transition">Beneficios</a>
+                <a href="#contacto" class="hover:text-teal-600 transition">Contacto</a>
+            </nav>
+            <a href="https://wa.me/#" class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-full font-semibold text-sm transition shadow-md">
+                Pedir por WhatsApp
+            </a>
+        </div>
+    </header>
+
+    <!-- 2. HERO SECTION -->
+    <section class="bg-gradient-to-b from-white to-[#E6FFFA] py-16 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <span class="bg-teal-100 text-teal-800 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">Salud Animal en Barranquilla</span>
+            <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mt-4 leading-tight">
+                Los mejores productos veterinarios <br class="hidden md:inline">para el consentido de la casa
+            </h1>
+            <p class="text-lg text-gray-600 mt-4 max-w-xl mx-auto">
+                Medicamentos especializados, nutrición premium y cuidado garantizado con entrega a domicilio en toda Quilla.
+            </p>
+            <div class="mt-8 flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-4">
+                <a href="#productos" class="bg-teal-600 hover:bg-teal-700 text-white font-bold px-8 py-3 rounded-lg shadow-lg transition text-center">
+                    Ver Catálogo
+                </a>
+                <a href="#contacto" class="bg-white hover:bg-gray-50 text-teal-700 font-bold px-8 py-3 rounded-lg border border-teal-200 transition text-center">
+                    Hablar con un Especialista
+                </a>
             </div>
         </div>
-    </div>
+    </section>
 
-    <script>
-        let tipoCreditoActivo = 'hipotecario';
+    <!-- 3. BENEFICIOS (UX TRUST) -->
+    <section id="beneficios" class="py-12 max-w-6xl mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-teal-50">
+                <div class="text-3xl mb-3">🚚</div>
+                <h3 class="font-bold text-lg text-gray-900">Domicilios en Barranquilla</h3>
+                <p class="text-gray-600 text-sm mt-2">Llevamos tus productos rápido y bajo las mejores condiciones de conservación.</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-teal-50">
+                <div class="text-3xl mb-3">🩺</div>
+                <h3 class="font-bold text-lg text-gray-900">Asesoría Profesional</h3>
+                <p class="text-gray-600 text-sm mt-2">Respaldado por médicos veterinarios expertos para guiar tu compra.</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-teal-50">
+                <div class="text-3xl mb-3">🛡️</div>
+                <h3 class="font-bold text-lg text-gray-900">Productos 100% Originales</h3>
+                <p class="text-gray-600 text-sm mt-2">Laboratorios certificados que garantizan el bienestar real de tu mascota.</p>
+            </div>
+        </div>
+    </section>
 
-        function cambiarTipo(tipo) {
-            tipoCreditoActivo = tipo;
-            
-            // Actualizar botones de pestañas
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+    <!-- 4. PRODUCTOS DESTACADOS -->
+    <section id="productos" class="py-12 max-w-6xl mx-auto px-4">
+        <div class="text-center mb-10">
+            <h2 class="text-3xl font-bold text-gray-900">Líneas de Productos Especializados</h2>
+            <p class="text-gray-600 mt-2">Encuentra exactamente lo que recetó el veterinario</p>
+        </div>
 
-            // Modificar visibilidad y valores sugeridos según la modalidad colombiana estándar
-            const divCuotaInicial = document.getElementById('divCuotaInicial');
-            const divAmortizacion = document.getElementById('divAmortizacion');
-            const lblMonto = document.getElementById('lblMonto');
-            const lblPlazo = document.getElementById('lblPlazo');
-            
-            if (tipo === 'hipotecario') {
-                lblMonto.textContent = "Valor del Inmueble ($ COP)";
-                lblPlazo.textContent = "Plazo de Amortización (Meses)";
-                divCuotaInicial.style.display = 'block';
-                divAmortizacion.style.display = 'block';
-                document.getElementById('montoPrincipal').value = "150000000";
-                document.getElementById('cuotaInicial').value = "45000000";
-                document.getElementById('tasaAnual').value = "11.5";
-                document.getElementById('plazo').value = "240";
-                document.getElementById('seguroMes').value = "55000";
-                document.getElementById('infoDinamica').innerHTML = "<strong>Análisis del Sistema:</strong> Financiamiento máx del 70% para vivienda NO VIS y 80% para VIS. Estabilidad a largo plazo mediante cuotas fijas en pesos.";
-            } else if (tipo === 'vehiculo') {
-                lblMonto.textContent = "Monto a Financiar el Vehículo ($ COP)";
-                lblPlazo.textContent = "Plazo de Amortización (Meses)";
-                divCuotaInicial.style.display = 'none';
-                divAmortizacion.style.display = 'none';
-                document.getElementById('montoPrincipal').value = "60000000";
-                document.getElementById('tasaAnual').value = "15.5";
-                document.getElementById('plazo').value = "72";
-                document.getElementById('seguroMes').value = "80000"; // Incluye póliza auto todo riesgo endosada
-                document.getElementById('infoDinamica').innerHTML = "<strong>Análisis del Sistema:</strong> El crédito de vehículo suele exigir pignoración del automotor. Las tasas varían si el carro es nuevo o usado.";
-            } else if (tipo === 'libre') {
-                lblMonto.textContent = "Monto del Crédito de Consumo ($ COP)";
-                lblPlazo.textContent = "Plazo Solicitado (Meses)";
-                divCuotaInicial.style.display = 'none';
-                divAmortizacion.style.display = 'none';
-                document.getElementById('montoPrincipal').value = "20000000";
-                document.getElementById('tasaAnual').value = "22.0";
-                document.getElementById('plazo').value = "48";
-                document.getElementById('seguroMes').value = "15000";
-                document.getElementById('infoDinamica').innerHTML = "<strong>Análisis del Sistema:</strong> Libre inversión/Consumo. Tasas más elevadas sujetas al perfil de riesgo. Alerta con la tasa de usura fijada por la Superfinanciera.";
-            } else if (tipo === 'tarjeta') {
-                lblMonto.textContent = "Cupo Utilizado / Avance / Compra ($ COP)";
-                lblPlazo.textContent = "Diferido a Cuotas (Meses)";
-                divCuotaInicial.style.display = 'none';
-                divAmortizacion.style.display = 'none';
-                document.getElementById('montoPrincipal').value = "5000000";
-                document.getElementById('tasaAnual').value = "28.5"; // Cercano a la usura habitual de tarjetas
-                document.getElementById('plazo').value = "24";
-                document.getElementById('seguroMes').value = "6000"; // Seguro de cartera común
-                document.getElementById('infoDinamica').innerHTML = "<strong>Análisis del Sistema:</strong> Compras diferidas a 1 sola cuota por lo general no generan intereses corrientes en Colombia. Evite los avances en efectivo debido a su alto costo inmediato.";
-            }
-            
-            calcularTodo();
-        }
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Producto 1 -->
+            <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 flex flex-col justify-between">
+                <div class="p-5 bg-teal-50 h-40 flex items-center justify-center text-5xl">💊</div>
+                <div class="p-5 flex-1 flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs font-semibold text-teal-600 uppercase">Medicamentos</span>
+                        <h4 class="font-bold text-gray-900 mt-1 text-base">Tratamientos Cardíacos y Renales</h4>
+                        <p class="text-gray-500 text-xs mt-1">Fórmulas específicas de alta gama para patologías crónicas.</p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-gray-50 flex items-center justify-between">
+                        <span class="font-bold text-teal-700 text-lg">Cotizar</span>
+                        <a href="https://wa.me/#?text=Hola,%20deseo%20cotizar%20medicamentos" class="text-sm bg-teal-50 text-teal-700 hover:bg-teal-600 hover:text-white px-3 py-1.5 rounded-md font-medium transition">Consultar</a>
+                    </div>
+                </div>
+            </div>
 
-        function calcularTodo() {
-            const montoPrincipal = parseFloat(document.getElementById('montoPrincipal').value) || 0;
-            const cuotaInicial = tipoCreditoActivo === 'hipotecario' ? (parseFloat(document.getElementById('cuotaInicial').value) || 0) : 0;
-            const tasaAnual = parseFloat(document.getElementById('tasaAnual').value) || 0;
-            const plazo = parseInt(document.getElementById('plazo').value) || 0;
-            const seguroMes = parseFloat(document.getElementById('seguroMes').value) || 0;
+            <!-- Producto 2 -->
+            <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 flex flex-col justify-between">
+                <div class="p-5 bg-amber-50 h-40 flex items-center justify-center text-5xl">🥩</div>
+                <div class="p-5 flex-1 flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs font-semibold text-amber-600 uppercase">Nutrición</span>
+                        <h4 class="font-bold text-gray-900 mt-1 text-base">Alimento Medicado Premium</h4>
+                        <p class="text-gray-500 text-xs mt-1">Dietas terapéuticas e hipoalergénicas para perros y gatos.</p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-gray-50 flex items-center justify-between">
+                        <span class="font-bold text-teal-700 text-lg">Desde $--</span>
+                        <a href="https://wa.me/#?text=Hola,%20deseo%20información%20de%20alimento%20medicado" class="text-sm bg-teal-50 text-teal-700 hover:bg-teal-600 hover:text-white px-3 py-1.5 rounded-md font-medium transition">Ver Marcas</a>
+                    </div>
+                </div>
+            </div>
 
-            const capitalFinanciar = montoPrincipal - cuotaInicial;
-            document.getElementById('resFinanciar').textContent = '$ ' + capitalFinanciar.toLocaleString('es-CO');
+            <!-- Producto 3 -->
+            <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 flex flex-col justify-between">
+                <div class="p-5 bg-blue-50 h-40 flex items-center justify-center text-5xl">🛡️</div>
+                <div class="p-5 flex-1 flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs font-semibold text-blue-600 uppercase">Protección</span>
+                        <h4 class="font-bold text-gray-900 mt-1 text-base">Antiparasitarios y Pipetas</h4>
+                        <p class="text-gray-500 text-xs mt-1">Protección efectiva contra pulgas, garrapatas y parásitos internos.</p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-gray-50 flex items-center justify-between">
+                        <span class="font-bold text-teal-700 text-lg">Disponible</span>
+                        <a href="https://wa.me/#?text=Hola,%20busco%20antiparasitarios" class="text-sm bg-teal-50 text-teal-700 hover:bg-teal-600 hover:text-white px-3 py-1.5 rounded-md font-medium transition">Comprar</a>
+                    </div>
+                </div>
+            </div>
 
-            if (capitalFinanciar <= 0 || plazo <= 0 || tasaAnual <= 0) {
-                document.getElementById('resCuotaBase').textContent = "$ 0";
-                document.getElementById('resCuotaTotal').textContent = "$ 0";
-                document.getElementById('resIntereses').textContent = "$ 0";
-                return;
-            }
+            <!-- Producto 4 -->
+            <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 flex flex-col justify-between">
+                <div class="p-5 bg-purple-50 h-40 flex items-center justify-center text-5xl">🧪</div>
+                <div class="p-5 flex-1 flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs font-semibold text-purple-600 uppercase">Suplementos</span>
+                        <h4 class="font-bold text-gray-900 mt-1 text-base">Vitaminas y Regeneradores</h4>
+                        <p class="text-gray-500 text-xs mt-1">Protección articular, ácidos grasos esenciales para piel y pelaje.</p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-gray-50 flex items-center justify-between">
+                        <span class="font-bold text-teal-700 text-lg">Cotizar</span>
+                        <a href="https://wa.me/#?text=Hola,%20busco%20suplementos%20vitaminicos" class="text-sm bg-teal-50 text-teal-700 hover:bg-teal-600 hover:text-white px-3 py-1.5 rounded-md font-medium transition">Consultar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-            // Convertir de Efectiva Anual (E.A) a Mensual Vencida (M.V)
-            const tasaMensual = Math.pow(1 + (tasaAnual / 100), 1 / 12) - 1;
-            document.getElementById('resTasaMes').textContent = (tasaMensual * 100).toFixed(2) + '%';
+    <!-- 5. CTA / SECCIÓN DE CONTACTO -->
+    <section id="contacto" class="py-16 max-w-4xl mx-auto px-4 text-center">
+        <div class="bg-white rounded-2xl p-8 md:p-12 shadow-md border border-teal-100">
+            <h2 class="text-3xl font-bold text-gray-900">¿Tienes la fórmula médica a la mano?</h2>
+            <p class="text-gray-600 mt-3 max-w-xl mx-auto">
+                Envíala por WhatsApp. Nuestros profesionales validarán la disponibilidad y organizarán tu envío inmediato en Barranquilla.
+            </p>
+            <div class="mt-8">
+                <a href="https://wa.me/#?text=Hola%20VetEspecialistas,%20aquí%20tengo%20mi%20fórmula%20médica" class="inline-flex items-center space-x-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg transition-transform transform hover:-translate-y-0.5">
+                    <span>🟢 Enviar Fórmula por WhatsApp</span>
+                </a>
+            </div>
+            <p class="text-xs text-gray-400 mt-4">Horario de atención: Lunes a Sábado de 7:00 AM a 7:00 PM</p>
+        </div>
+    </section>
 
-            // Cálculo de la cuota base usando amortización constante (sistema francés)
-            const cuotaBase = (capitalFinanciar * tasaMensual) / (1 - Math.pow(1 + tasaMensual, -plazo));
-            const cuotaTotal = cuotaBase + seguroMes;
-            const totalIntereses = (cuotaBase * plazo) - capitalFinanciar;
+    <!-- 6. FOOTER -->
+    <footer class="bg-gray-900 text-gray-400 py-8 text-center text-sm border-t border-gray-800">
+        <div class="max-w-6xl mx-auto px-4">
+            <p class="font-semibold text-gray-300">VetEspecialistas CO</p>
+            <p class="mt-1">Servicio de distribución especializada — Barranquilla, Colombia</p>
+            <p class="text-xs mt-6 text-gray-600">&copy; 2026 VetEspecialistas CO. Todos los derechos reservados. Diseñado bajo estándares UX/UI moderados.</p>
+        </div>
+    </footer>
 
-            document.getElementById('resCuotaBase').textContent = '$ ' + Math.round(cuotaBase).toLocaleString('es-CO');
-            document.getElementById('resSeguro').textContent = '$ ' + Math.round(seguroMes).toLocaleString('es-CO');
-            document.getElementById('resCuotaTotal').textContent = '$ ' + Math.round(cuotaTotal).toLocaleString('es-CO');
-            document.getElementById('resIntereses').textContent = '$ ' + Math.round(totalIntereses).toLocaleString('es-CO');
-        }
-
-        // Listener para recálculo dinámico en cualquier interacción
-        document.querySelectorAll('input, select').forEach(element => {
-            element.addEventListener('input', calcularTodo);
-        });
-
-        // Inicialización en la carga original
-        calcularTodo();
-    </script>
 </body>
 </html>
